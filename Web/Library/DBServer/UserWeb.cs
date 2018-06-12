@@ -26,12 +26,10 @@ namespace Library
         #region 讀取
         public IEnumerable<User> GetUsers()
         {
-            string connectionString =
-                ConfigurationManager.ConnectionStrings["WebContext"].ConnectionString;
             List<User> users = new List<User>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetUser", con);
+                SqlCommand cmd = new SqlCommand("msp_GetUser", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -55,13 +53,13 @@ namespace Library
         }
         #endregion
 
-        #region 管理者新增帳號
+        #region 新增帳號
         public void AddUser(User user)
         {
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spAddUser", con)
+                SqlCommand cmd = new SqlCommand("msp_AddUser", con)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -131,12 +129,10 @@ namespace Library
         #region 更新
         public void SaveUser(User user)
         {
-            string connectionString =
-                ConfigurationManager.ConnectionStrings["webContext"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spSaveUser", con)
+                SqlCommand cmd = new SqlCommand("msp_SaveUser", con)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -197,6 +193,13 @@ namespace Library
                 };
                 cmd.Parameters.Add(sqlParamMofiyDate);
 
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = user.Delete
+                };
+                cmd.Parameters.Add(sqlParamDelete);
+
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -206,12 +209,10 @@ namespace Library
         #region 刪除
         public void DeleteUser(int id)
         {
-            string connectionString =
-                    ConfigurationManager.ConnectionStrings["webContext"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spDeleteUser", con);
+                SqlCommand cmd = new SqlCommand("msp_DeleteUser", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 SqlParameter sqlParamId = new SqlParameter

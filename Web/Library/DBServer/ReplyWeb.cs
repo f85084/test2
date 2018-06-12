@@ -26,7 +26,7 @@ namespace Library
             List<Reply> replys = new List<Reply>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetReply", con);
+                SqlCommand cmd = new SqlCommand("msp_GetReply", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -39,6 +39,7 @@ namespace Library
                     reply.UserName = rdr["UserName"].ToString();
                     reply.Context = rdr["Context"].ToString();
                     reply.CreatDate = Convert.ToDateTime(rdr["CreatDate"]);
+                    reply.Delete = Convert.ToBoolean(rdr["Delete"]);
                     replys.Add(reply);
                 }
             }
@@ -49,12 +50,10 @@ namespace Library
 
         public void AddReply(Reply reply)
         {
-            string connectionString =
-            ConfigurationManager.ConnectionStrings["webContext"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spAddReply", con)
+                SqlCommand cmd = new SqlCommand("msp_AddReply", con)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -93,6 +92,13 @@ namespace Library
                     Value = dt
                 };
                 cmd.Parameters.Add(sqlParamCreatDate);
+
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = reply.Delete
+                };
+                cmd.Parameters.Add(sqlParamDelete);
 
                 con.Open();
                 cmd.ExecuteNonQuery();

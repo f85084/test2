@@ -25,10 +25,10 @@
                     @Html.LabelFor(model => model.UserClass, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownList("UserClass", new List<SelectListItem>
-                {
-                    new SelectListItem{Text = "管理員", Value = "0"},
-                    new SelectListItem{Text = "一般使用者", Value = "1"}
-                }, "請選擇會員身分")
+                            {
+                                new SelectListItem{Text = "管理員", Value = "0"},
+                                new SelectListItem{Text = "一般使用者", Value = "1"}
+                            }, "請選擇會員身分")
                         @Html.ValidationMessageFor(model => model.UserClass, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -54,6 +54,25 @@
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                 </div>
             </div>
+
+            @if (UserClass == 0 || UserClass == null)
+            {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Delete, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Delete", new List<SelectListItem>
+                        {
+                            new SelectListItem{Text = "顯示", Value = "true"},
+                            new SelectListItem{Text = "刪除", Value = "false"}
+                        }, "會員狀態")
+                    @Html.ValidationMessageFor(model => model.Delete, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            }
+            else
+            {
+                @Html.Hidden("Delete", "true")
+            }
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Save" class="btn btn-default" />
@@ -61,6 +80,8 @@
             </div>
         </div>
     }
+
+ 
 
     @if (UserClass == 0)
     {

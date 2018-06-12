@@ -37,5 +37,11 @@ namespace Library
         /// 留言時間
         /// </summary>
         public System.DateTime CreatDate { get; set; }
+
+        /// <summary>
+        /// 刪除留言
+        /// </summary>
+        [Display(Name = "刪除留言")]
+        public bool Delete { get; set; }
     }
 }

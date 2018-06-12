@@ -5,7 +5,8 @@ CREATE TABLE [Message]
       UserId int  NULL ,  
       UserName NVARCHAR(20) NOT NULL ,  
       Context NVARCHAR(200) NOT NULL ,  
-      CreatDate Datetime NOT NULL ,         
+      CreatDate Datetime NOT NULL , 
+	  [Delete] bit NOT NULL ,        
     );  
 
 GO 

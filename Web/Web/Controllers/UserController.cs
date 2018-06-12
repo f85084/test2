@@ -54,7 +54,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Library.User user, string UserAccount)
+        public ActionResult Create(Library.User user, string UserAccount, int UserClass )
         {
             UserWeb userWeb = new UserWeb();
 
@@ -74,9 +74,15 @@ namespace Web.Controllers
                 return View("Create");
             }
 
-
             userWeb.AddUser(user);
-            return RedirectToAction("Index");
+            if (UserClass == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index" , "Message");
+            }
         }
         #endregion
 

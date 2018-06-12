@@ -28,7 +28,7 @@ namespace Library
             List<Message> messages = new List<Message>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetMessage", con);
+                SqlCommand cmd = new SqlCommand("msp_GetMessage", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -40,6 +40,7 @@ namespace Library
                     message.UserName = rdr["UserName"].ToString();
                     message.Context = rdr["Context"].ToString();
                     message.CreatDate = Convert.ToDateTime(rdr["CreatDate"]);
+                    message.Delete = Convert.ToBoolean(rdr["Delete"]);
                     messages.Add(message);
                 }
             }
@@ -53,7 +54,7 @@ namespace Library
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spAddMessage", con)
+                SqlCommand cmd = new SqlCommand("msp_AddMessage", con)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -86,18 +87,25 @@ namespace Library
                 };
                 cmd.Parameters.Add(sqlParamCreatDate);
 
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = message.Delete
+                };
+                cmd.Parameters.Add(sqlParamDelete);
+
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
         }
         #endregion
 
-        #region 新增留言
+        #region 更新留言
         public void SaveMessage(Message message)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spSaveMessage", con)
+                SqlCommand cmd = new SqlCommand("msp_SaveMessage", con)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -137,6 +145,7 @@ namespace Library
         }
         #endregion
 
+        #region 刪除
         public void DeleteMessage(int id)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -155,7 +164,7 @@ namespace Library
                 cmd.ExecuteNonQuery();
             }
         }
-
+        #endregion
 
     }
 }

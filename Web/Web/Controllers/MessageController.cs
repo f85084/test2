@@ -21,21 +21,11 @@ namespace Web.Controllers
         {
 
             List<Library.Message> messages = messageWeb.GetMessages().ToList();
-            //messages = messageWeb.GetMessages();
-            if (searchBy == "UserName")
-            {
-                messages = messageWeb.GetMessages()
-                   .Where(x => x.UserName == searchText || searchText == null)
-                   .ToList();
-            }
-            if (searchBy == "Context")
-            {
-                messages = messageWeb.GetMessages()
-                    .Where(x => x.Context.Contains(searchText) || searchText == null)
+            messages = messageWeb.GetMessages()
+                    .Where(x => x.Delete == true)
                     .ToList();
-            }
-            //IPagedList<Message> messagePagedList = messages.ToPagedList(pageNumber ?? 1, 5);
-            return View(messageWeb.GetMessages());
+
+            return View(messages);
         }
         #endregion
 
@@ -80,12 +70,18 @@ namespace Web.Controllers
 
         #region 測試回覆Partial
         [HttpGet]
-        public ActionResult Index2(int messageId = 36)
+        public ActionResult Index2(int? messageId)
         {
+            ViewBag.MessageId = messageId;
             ReplyWeb replyWeb = new ReplyWeb();
             List<MessageReply> data = new List<MessageReply>();
             List<Library.Reply> replys = replyWeb.GetReply().ToList();
-            //List<Library.Reply> test = data.Replys.ToList();
+            List<MessageReply> test = data.ToList();
+            //replys = replyWeb.GetReply()
+            //        .Where(x => x.MessageId == messageId)
+            //        .ToList();
+            //return View("_ReplyPartial", replys);
+
             replys = replyWeb.GetReply()
                     .Where(x => x.MessageId == messageId)
                     .ToList();

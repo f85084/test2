@@ -27,14 +27,16 @@ namespace Web.Controllers
 
         #region 建立
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int? messageId)
         {
+            ViewBag.MessageId = messageId;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(Library.Reply reply)
+        public ActionResult Create(Library.Reply reply )
         {
+
             if (!ModelState.IsValid)
             {
                 return View("Create");

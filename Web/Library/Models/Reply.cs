@@ -38,5 +38,11 @@ namespace Library
         /// 回覆時間
         /// </summary>
         public DateTime? CreatDate { get; set; }
+
+        /// <summary>
+        /// 刪除回覆
+        /// </summary>
+        [Display(Name = "刪除回覆")]
+        public bool Delete { get; set; }
     }
 }
