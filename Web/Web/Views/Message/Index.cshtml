@@ -31,7 +31,14 @@
                     </div>
                     <div class="card-body">
                         <h5>回覆</h5>
+                        @using (Html.BeginForm("Index2", "Message"))
+                        {
+                        @Html.EditorForModel()
+                        <br />
+                        @*<input type="submit" value="Submit" />*@
+                        }
                         @*@Html.Partial("_ReplyPartial", Model)*@
+                        @*@Html.Partial("_ReplyPartial", new { messageId = item.Id }))*@
                     </div>
                 </div>
                 }

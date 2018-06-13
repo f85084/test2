@@ -54,7 +54,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Library.User user, string UserAccount, int UserClass )
+        public ActionResult Create(Library.User user, string UserAccount, int UserClass , int Password)
         {
             UserWeb userWeb = new UserWeb();
 
@@ -73,6 +73,8 @@ namespace Web.Controllers
             {
                 return View("Create");
             }
+
+            //Password = HashPassword(Password);
 
             userWeb.AddUser(user);
             if (UserClass == 0)

@@ -41,7 +41,7 @@ namespace Library
         /// <summary>
         /// 會員密碼
         /// </summary>
-        [Display(Name = "會員密碼")]
+        [Display(Name = "密碼")]
         [Required(ErrorMessage = "請輸入密碼")]
         public string Password { get; set; }
 

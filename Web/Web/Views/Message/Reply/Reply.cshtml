@@ -1,12 +1,8 @@
 ﻿@*@model Library.Reply*@
 @using Library;
-@model IEnumerable<Library.Message>
+@model IEnumerable<Library.Reply>
 
-@*@using Web.Models;
-    @model MessageReply*@
-@*@Html.Hidden("MessageId", "1")*@
-
-@foreach (Message item in Model)
+@foreach (Reply item in Model)
 {
     <div class="card-title">
         @*@Html.Hidden("MessageId", "36")*@

@@ -44,5 +44,7 @@ namespace Library
         /// </summary>
         [Display(Name = "刪除回覆")]
         public bool Delete { get; set; }
+
+        public List<Message> Messages { get; set; }
     }
 }

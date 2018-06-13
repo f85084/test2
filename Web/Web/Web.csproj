@@ -150,6 +150,7 @@
     <Content Include="Views\Reply\Index2.cshtml" />
     <Content Include="Views\Message\Index3.cshtml" />
     <Content Include="Views\Shared\_Identity.cshtml" />
+    <Content Include="Views\Message\Reply\Reply.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
