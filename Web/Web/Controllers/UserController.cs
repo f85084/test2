@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-//using Web.Data;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net;
 using System.Configuration;
-//using User = Web.Models.User;
 using System.Data.SqlClient;
 using System.Web.Security;
 using System;
@@ -16,37 +14,30 @@ namespace Web.Controllers
 {
     public class UserController : Controller
     {
-        #region 密碼加密
-        /// <summary>
-        /// 密碼加密
-        /// </summary>
-        /// <param name="password">密碼</param>
-        /// <param name="salt">加密</param>
-        /// <returns></returns>
-        //protected string CryptographyPassword(string password, string salt)
-        //{
-        //    string cryptographyPassword =
-        //        FormsAuthentication.HashPasswordForStoringInConfigFile(password + salt, "sha1");
-
-        //    return cryptographyPassword;
-        //}
-        #endregion
 
         UserWeb userWeb = new UserWeb();
 
-        #region 頁面取得
+        #region 會員首頁取得
+
+        /// <summary>
+        /// 會員首頁取得
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
-            //List<Library.User> users = userWeb.Users.ToList();
-            List<Library.User> users = userWeb.GetUsers().ToList();
-            users = userWeb.GetUsers()
-                    .Where(x => x.Delete == true)
+            List<Library.User> users =  userWeb.GetUsers()
+                    .Where(x => !x.Delete )
                     .ToList();
             return View(users);
         }
         #endregion
 
-        #region 建立
+        #region 建立會員
+
+        /// <summary>
+        /// 建立會員
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Create()
         {
@@ -54,27 +45,15 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Library.User user, string UserAccount, int UserClass , int Password)
+        public ActionResult Create(Library.User user, string UserAccount, int UserClass )
         {
             UserWeb userWeb = new UserWeb();
 
-            //帳號重覆
-            //List<Library.User> users = userWeb.GetUsers().ToList();
-            //users = userWeb.GetUsers()
-            //        .Where(x => x.UserAccount == UserAccount)
-            //        .ToList();
-            //UserAccount = users.ExecuteReader()
-            //if ()
-            //{
-            //    ViewBag.Message = "帳號已重覆";
-            //    return View("Create");
-            //}
+
             if (!ModelState.IsValid)
             {
                 return View("Create");
             }
-
-            //Password = HashPassword(Password);
 
             userWeb.AddUser(user);
             if (UserClass == 0)
@@ -88,7 +67,13 @@ namespace Web.Controllers
         }
         #endregion
 
-        #region 明細
+        #region 明細頁
+
+        /// <summary>
+        /// 明細頁
+        /// </summary>
+        /// <param name="id">會員Id</param>
+        /// <returns></returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -105,7 +90,13 @@ namespace Web.Controllers
         }
         #endregion
 
-        #region 更新
+        #region 編輯會員資料
+
+        /// <summary>
+        /// 編輯會員資料
+        /// </summary>
+        /// <param name="id">會員Id</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Edit(int? id)
         {
@@ -113,10 +104,6 @@ namespace Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //List<Library.User> users = userWeb.GetUsers().ToList();
-            //users = userWeb.GetUsers()
-            //        .Where(x => x.Id == id)
-            //        .ToList();
 
             Library.User user = userWeb.GetUsers().Single(g => g.Id == id);
             if (user == null)
@@ -141,7 +128,13 @@ namespace Web.Controllers
         }
         #endregion
 
-        #region 刪除
+        #region 刪除會員
+
+        /// <summary>
+        /// 刪除會員
+        /// </summary>
+        /// <param name="id">會員Id</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -194,21 +187,6 @@ namespace Web.Controllers
         //        return View();
         //    }
         //}
-        #endregion
-
-        #region 帳號註冊重複確認
-        //確認要註冊帳號是否有被註冊過的方法
-        public bool AccountCheck(string UserAccount)
-        {
-            //藉由傳入帳號取得會員資料
-            List<Library.User> users = userWeb.GetUsers().ToList();
-            users = userWeb.GetUsers()
-                    .Where(x => x.UserAccount == UserAccount)
-                    .ToList();
-            //判斷是否有查詢到會員
-            bool result = (users == null);
-            return result; //回傳結果
-        }
         #endregion
 
     }

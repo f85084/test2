@@ -1,24 +1,22 @@
-﻿@*@model IEnumerable<Library.User>*@
-@using Library.WebShare;
+﻿@*@model IEnumerable<Library.User>
+    *@
+    @using Library.WebShare;
+    @model Library.User
 
-@model Library.User
-
-@{
-    /**/
+    @{
 
     ViewBag.Title = "登入";
-}
-<h2>登入</h2>
-@using (Html.BeginForm("Login", "User"))
-{
+    }
+    <h2>登入</h2>
+    @using (Html.BeginForm("Login", "User"))
+    {
     <table>
         <tr>
             <td>
                 @Html.HiddenFor(model => model.Id)
                 @Html.LabelFor(model => model.UserAccount)
             </td>
-            <td>
-            </td>
+            <td></td>
             <td>
                 @Html.TextBoxFor(model => model.UserAccount)
                 @Html.ValidationMessageFor(model => model.UserAccount)
@@ -44,9 +42,9 @@
                 <div class="form-group">
                     <input type="submit" value="登入" class="btn btn-primary btn-sm center" style="margin-top:5px ;margin-bottom:5px;" />
                     <br />
-                    <input type="button" class="btn btn-primary btn-sm " style="margin-top:5px ;margin-bottom:10px;" value="註冊" onclick="location.href='@Url.Action("Create", "User")'">
+                    <input type="button" class="btn btn-primary btn-sm " style="margin-top:5px ;margin-bottom:10px;" value="註冊" onclick="location.href='@Url.Action("Create", "User" )'">
                 </div>
             </td>
         </tr>
     </table>
-}
+    }
