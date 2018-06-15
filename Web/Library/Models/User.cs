@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Library.WebShare;
+using System.Web.Mvc;
+
+
 
 namespace Library
 {
@@ -21,6 +25,7 @@ namespace Library
         [Display(Name = "帳號")]
         [Required(ErrorMessage = "請輸入帳號")]
         [RegularExpression(WebShareConst.UserAccountExpression, ErrorMessage = WebShareConst.AccountNotValid)]
+        //[Remote("AccountCheck", "Member", ErrorMessage = "此帳號已被註冊過")]
         public string UserAccount { get; set; }
 
         /// <summary>

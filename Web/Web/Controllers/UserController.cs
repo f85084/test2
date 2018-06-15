@@ -56,16 +56,24 @@ namespace Web.Controllers
             }
 
             userWeb.AddUser(user);
-            if (UserClass == 0)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Index" , "Message");
-            }
+        return RedirectToAction("Index" , "Login");
         }
+
         #endregion
+
+        #region 帳號註冊重複確認
+        ////確認要註冊帳號是否有被註冊過的方法
+        //public bool AccountCheck(string UserAccount)
+        //{
+        //    //藉由傳入帳號取得會員資料
+        //    User Serch = userWeb.User.Find(UserAccount);
+        //    //判斷是否有查詢到會員
+        //    bool result = (Serch == null);
+        //    //回傳結果
+        //    return result;
+        //}
+        #endregion
+
 
         #region 明細頁
 

@@ -15,70 +15,45 @@ namespace Library
 
 
         #region 讀取
-        public IEnumerable<Message> GetMessages()
-        {
-            List<Message> messages = new List<Message>();
-            using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
-            {
-                SqlCommand cmd = new SqlCommand(SPName.Message.Message_Get, con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Message message = new Message();
-                    message.Id = Convert.ToInt32(rdr["Id"]);
-                    message.UserId = Convert.ToInt32(rdr["UserId"]);
-                    message.UserName = rdr["UserName"].ToString();
-                    message.Context = rdr["Context"].ToString();
-                    message.CreatDate = Convert.ToDateTime(rdr["CreatDate"]);
-                    message.Delete = Convert.ToBoolean(rdr["Delete"]);
-                    messages.Add(message);
-                }
-            }
-            return messages;
-        }
 
-
+        /// <summary>
+        /// 取得留言回覆
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<MessageReply> GetMessageReplys()
         {
             List<MessageReply> result = new List<MessageReply>();
 
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
             {
-                string commend = @"select * 
-from Message
-left outer join Reply 
-on Message.Id = Reply.MessageId
-order by Message.Id";
-                SqlCommand cmd = new SqlCommand(commend, con);
-                cmd.CommandType = CommandType.Text;
+                SqlCommand cmd = new SqlCommand(SPName.MessageReply.MessageRely_Get, con);
+                cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 int currentID = 0;
                 MessageReply item = null;
                 while (dr.Read())
                 {
-                    if (currentID == 0 || int.Parse(dr[0].ToString()) != currentID)
+                    if (currentID == 0 || int.Parse(dr["Message_Id"].ToString()) != currentID)
                     {
                         Message msg = new Message()
                         {
-                            Id = Convert.ToInt32(dr[0]),
-                            UserName = dr[2].ToString(),
-                            Context = dr[3].ToString(),
-                            CreatDate = Convert.ToDateTime(dr[4].ToString())
+                            Id = Convert.ToInt32(dr["Message_Id"]),
+                            UserName = dr["Message_UserName"].ToString(),
+                            Context = dr["Message_Context"].ToString(),
+                            CreatDate = Convert.ToDateTime(dr["Message_CreatDate"].ToString())
                         };
                         item = new MessageReply();
                         item.Messages = msg;
                         item.ReplyList = new List<Reply>();
-                        if (dr[7] != DBNull.Value)
+                        if (dr["Reply_Id"] != DBNull.Value)
                         {
 
                             Reply reply = new Reply()
                             {
-                                UserName = dr[9].ToString(),
-                                Context = dr[10].ToString(),
-                                CreatDate = Convert.ToDateTime(dr[11].ToString())
+                                UserName = dr["Reply_UserName"].ToString(),
+                                Context = dr["Reply_Context"].ToString(),
+                                CreatDate = Convert.ToDateTime(dr["Reply_CreatDate"].ToString())
                             };
                             item.ReplyList.Add(reply);
                         }
@@ -90,54 +65,9 @@ order by Message.Id";
                     {
                         item.ReplyList.Add(new Reply
                         {
-                            UserName = dr[9].ToString(),
-                            Context = dr[10].ToString(),
-                            CreatDate = Convert.ToDateTime(dr[11].ToString())
-                        });
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public IEnumerable<MessageReply> GetMessageReplysV2()
-        {
-            List<MessageReply> result = new List<MessageReply>();
-
-            using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
-            {
-                string commend = @"SELECT * FROM  Message
-                                   SELECT * FROM Reply";
-                SqlCommand cmd = new SqlCommand(commend, con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
-                {
-                    Message msg = new Message()
-                    {
-                        Id = Convert.ToInt32(dr[0]),
-                        UserName = dr[2].ToString(),
-                        Context = dr[3].ToString(),
-                        CreatDate = Convert.ToDateTime(dr[4].ToString())
-                    };
-                    result.Add(new MessageReply() { Messages = msg, ReplyList = new List<Reply>() });
-                }
-
-                dr.NextResult();
-
-                while (dr.Read())
-                {
-                    int msgID = Convert.ToInt32(dr["MessageId"]);
-                    MessageReply msg = result.FirstOrDefault(m => m.Messages.Id == msgID);
-                    if (msg != null)
-                    {
-                        msg.ReplyList.Add(new Reply()
-                        {
-                            UserName = dr[3].ToString(),
-                            Context = dr[4].ToString(),
-                            CreatDate = Convert.ToDateTime(dr[5].ToString())
+                            UserName = dr["Reply_UserName"].ToString(),
+                            Context = dr["Reply_Context"].ToString(),
+                            CreatDate = Convert.ToDateTime(dr["Reply_CreatDate"].ToString())
                         });
                     }
                 }
@@ -168,6 +98,8 @@ order by Message.Id";
                 SqlParameter sqlParamUserName = new SqlParameter
                 {
                     ParameterName = "@UserName",
+                    SqlDbType= SqlDbType.NVarChar,
+                    Size=20,
                     Value = message.UserName
                 };
                 cmd.Parameters.Add(sqlParamUserName);
@@ -175,6 +107,8 @@ order by Message.Id";
                 SqlParameter sqlParamContext = new SqlParameter
                 {
                     ParameterName = "@Context",
+                    SqlDbType = SqlDbType.NVarChar,
+                    Size = 200,
                     Value = message.Context
                 };
                 cmd.Parameters.Add(sqlParamContext);
