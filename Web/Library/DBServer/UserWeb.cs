@@ -13,14 +13,6 @@ namespace Library
 {
     public class UserWeb
     {
-        public IEnumerable<User> user
-        {
-            get;
-            set;
-        }
-        public string UserAccount { get; set; }
-
-
 
         #region 讀取
         public IEnumerable<User> GetUsers()
@@ -31,20 +23,20 @@ namespace Library
                 SqlCommand cmd = new SqlCommand(SPName.User.User_Get, con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
                 {
                     User user = new User();
-                    user.Id = Convert.ToInt32(rdr["Id"]);
-                    user.UserAccount = rdr["UserAccount"].ToString();
-                    user.UserClass = Convert.ToByte(rdr["UserClass"]);
-                    user.Email = rdr["Email"].ToString();
-                    user.Password = rdr["Password"].ToString();
-                    user.UserName = rdr["UserName"].ToString();
-                    user.CreatDate = Convert.ToDateTime(rdr["CreatDate"]);
-                    user.MofiyDate = Convert.ToDateTime(rdr["MofiyDate"]);
-                    //user.MofiyDate = DBNull.Value==   ? 0:Convert.ToDateTime(rdr["MofiyDate"]) ;
-                    user.Delete = Convert.ToBoolean(rdr["Delete"]);
+                    user.Id = Convert.ToInt32(dr["Id"]);
+                    user.UserAccount = dr["UserAccount"].ToString();
+                    user.UserClass = Convert.ToByte(dr["UserClass"]);
+                    user.Email = dr["Email"].ToString();
+                    user.Password = dr["Password"].ToString();
+                    user.UserName = dr["UserName"].ToString();
+                    user.CreatDate = Convert.ToDateTime(dr["CreatDate"]);
+                    user.MofiyDate = Convert.ToDateTime(dr["MofiyDate"]);
+                    //user.MofiyDate = DBNull.Value==   ? 0:Convert.ToDateTime(dr["MofiyDate"]) ;
+                    user.Delete = Convert.ToBoolean(dr["Delete"]);
                     users.Add(user);
                 }
             }
@@ -230,5 +222,27 @@ namespace Library
         }
         #endregion
 
+        #region 驗證帳號重複
+        public void CheckAccount_Get(string UserAccount)
+        {
+            using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
+            {
+                SqlCommand cmd = new SqlCommand(SPName.User.CheckAccount_Get, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    if(dr.HasRows)
+                     { 
+                        MessageBox.Show("己有此筆資料");
+                        dr.Close(); 
+	                    return; 
+                      } 
+                }
+            }
+        }
+
+        #endregion
     }
 }

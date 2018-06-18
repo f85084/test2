@@ -62,13 +62,14 @@ namespace Web.Controllers
         #endregion
 
         #region 帳號註冊重複確認
-        ////確認要註冊帳號是否有被註冊過的方法
-        //public bool AccountCheck(string UserAccount)
+        //確認要註冊帳號是否有被註冊過的方法
+        //public ActionResult AccountCheck(string UserAccount)
         //{
-        //    //藉由傳入帳號取得會員資料
-        //    User Serch = userWeb.User.Find(UserAccount);
+        //    ////藉由傳入帳號取得會員資料
+        //    //User Serch = userWeb.User.Find(UserAccount);
+        //    Library.User user = userWeb.GetUsers().Single(g => g.UserAccount == UserAccount);
         //    //判斷是否有查詢到會員
-        //    bool result = (Serch == null);
+        //    if(user=true)
         //    //回傳結果
         //    return result;
         //}
