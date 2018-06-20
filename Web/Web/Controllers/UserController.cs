@@ -47,7 +47,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Library.User user, string userAccount, int UserClass)
+        public ActionResult Create(Library.User user, string UserAccount, int UserClass)
         {
             UserWeb userWeb = new UserWeb();
 
@@ -56,24 +56,32 @@ namespace Web.Controllers
             {
                 return View("Create");
             }
-            //Library.User CheckUserAccount = userWeb.GetUsers().Single(g => g.UserAccount == UserAccount);
-            //Library.User CheckUserAccount = userWeb.GetUsers().Find(g => g.UserAccount == UserAccount);
-            //bool CheckUserAccount = userWeb.GetUsers().Exists(g => g.UserAccount == UserAccount);
+            //var CheckUserAccount = userWeb.GetUsers();
 
-            //if (CheckUserAccount != null)
+            //if (CheckUserAccount.Any(u => u.UserAccount == UserAccount))
             //{
             //    ModelState.AddModelError("UserAccount", "帳號已註冊過!");
             //    return View();
             //}
 
-            userWeb.AddUser(user);
-            if (UserClass == 0)
+
+            //驗證帳號
+            if (userWeb.CheckAccount(UserAccount))
             {
-                return RedirectToAction("Index");
+                ViewBag.Msg = "帳號已註冊過";
+                return View();
             }
             else
             {
-                return RedirectToAction("Index", "Message");
+                userWeb.AddUser(user);
+                if (UserClass == 0)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Message");
+                }
             }
         }
         #endregion
@@ -200,19 +208,6 @@ namespace Web.Controllers
         //}
         #endregion
 
-        #region 帳號註冊重複確認
-        //////確認要註冊帳號是否有被註冊過的方法
-        public bool AccountCheck(string UserAccount)
-        {
-            //藉由傳入帳號取得會員資料
-            //User Serch = userWeb.user.Find(UserAccount);
-            Library.User user = userWeb.GetUsers().Single(g => g.UserAccount == UserAccount);
-            //bool user = userWeb.GetUsers().Exists(x => x.Id == UserAccount);
-            //判斷是否有查詢到會員
-            bool result = (user == null);
-            //回傳結果
-            return result;
-        }
-        #endregion
+
     }
 }

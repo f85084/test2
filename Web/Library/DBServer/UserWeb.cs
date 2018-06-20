@@ -8,11 +8,18 @@ using System.Data;
 using System.Data.SqlClient;
 using Library.DBServer;
 
-
 namespace Library
 {
     public class UserWeb
     {
+        public IEnumerable<User> user
+        {
+            get;
+            set;
+        }
+        public string UserAccount { get; set; }
+
+
 
         #region 讀取
         public IEnumerable<User> GetUsers()
@@ -23,20 +30,20 @@ namespace Library
                 SqlCommand cmd = new SqlCommand(SPName.User.User_Get, con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
                 {
                     User user = new User();
-                    user.Id = Convert.ToInt32(dr["Id"]);
-                    user.UserAccount = dr["UserAccount"].ToString();
-                    user.UserClass = Convert.ToByte(dr["UserClass"]);
-                    user.Email = dr["Email"].ToString();
-                    user.Password = dr["Password"].ToString();
-                    user.UserName = dr["UserName"].ToString();
-                    user.CreatDate = Convert.ToDateTime(dr["CreatDate"]);
-                    user.MofiyDate = Convert.ToDateTime(dr["MofiyDate"]);
-                    //user.MofiyDate = DBNull.Value==   ? 0:Convert.ToDateTime(dr["MofiyDate"]) ;
-                    user.Delete = Convert.ToBoolean(dr["Delete"]);
+                    user.Id = Convert.ToInt32(rdr["Id"]);
+                    user.UserAccount = rdr["UserAccount"].ToString();
+                    user.UserClass = Convert.ToByte(rdr["UserClass"]);
+                    user.Email = rdr["Email"].ToString();
+                    user.Password = rdr["Password"].ToString();
+                    user.UserName = rdr["UserName"].ToString();
+                    user.CreatDate = Convert.ToDateTime(rdr["CreatDate"]);
+                    user.MofiyDate = Convert.ToDateTime(rdr["MofiyDate"]);
+                    //user.MofiyDate = DBNull.Value==   ? 0:Convert.ToDateTime(rdr["MofiyDate"]) ;
+                    user.Delete = Convert.ToBoolean(rdr["Delete"]);
                     users.Add(user);
                 }
             }
@@ -50,75 +57,80 @@ namespace Library
 
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
             {
-                SqlCommand cmd = new SqlCommand(SPName.User.User_Add, con)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    SqlCommand cmd = new SqlCommand(SPName.User.User_Add, con)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
 
-                SqlParameter sqlParamUserAccount = new SqlParameter
-                {
-                    ParameterName = "@UserAccount",
-                    Value = user.UserAccount
-                };
-                cmd.Parameters.Add(sqlParamUserAccount);
+                    SqlParameter sqlParamUserAccount = new SqlParameter
+                    {
+                        ParameterName = "@UserAccount",
+                        SqlDbType = SqlDbType.NVarChar,
+                        Size = 50,
+                        Value = user.UserAccount
+                    };
+                    cmd.Parameters.Add(sqlParamUserAccount);
 
-                SqlParameter sqlParamUserClass = new SqlParameter
-                {
-                    ParameterName = "@UserClass",
-                    Value = user.UserClass
-                };
-                cmd.Parameters.Add(sqlParamUserClass);
+                    SqlParameter sqlParamUserClass = new SqlParameter
+                    {
+                        ParameterName = "@UserClass",
+                        Value = user.UserClass
+                    };
+                    cmd.Parameters.Add(sqlParamUserClass);
 
-                SqlParameter sqlParamEmail = new SqlParameter
-                {
-                    ParameterName = "@Email",
-                    Value = user.Email
-                };
-                cmd.Parameters.Add(sqlParamEmail);
+                    SqlParameter sqlParamEmail = new SqlParameter
+                    {
+                        ParameterName = "@Email",
+                        SqlDbType = SqlDbType.NVarChar,
+                        Size = 50,
+                        Value = user.Email
+                    };
+                    cmd.Parameters.Add(sqlParamEmail);
 
-                SqlParameter sqlParamPassword = new SqlParameter
-                {
-                    ParameterName = "@Password",
-                    Value = user.Password
-                };
-                cmd.Parameters.Add(sqlParamPassword);
+                    SqlParameter sqlParamPassword = new SqlParameter
+                    {
+                        ParameterName = "@Password",
+                        SqlDbType = SqlDbType.NVarChar,
+                        Size = 20,
+                        Value = user.Password
+                    };
+                    cmd.Parameters.Add(sqlParamPassword);
 
-                SqlParameter sqlParamUserName = new SqlParameter
-                {
-                    ParameterName = "@UserName",
-                    Value = user.UserName
-                };
-                cmd.Parameters.Add(sqlParamUserName);
+                    SqlParameter sqlParamUserName = new SqlParameter
+                    {
+                        ParameterName = "@UserName",
+                        SqlDbType = SqlDbType.NVarChar,
+                        Size = 20,
+                        Value = user.UserName
+                    };
+                    cmd.Parameters.Add(sqlParamUserName);
 
-                SqlParameter sqlParamCreatDate = new SqlParameter
-                {
-                    ParameterName = "@CreatDate",
-                    Value = DateTime.Now
-                };
-                cmd.Parameters.Add(sqlParamCreatDate);
+                    SqlParameter sqlParamCreatDate = new SqlParameter
+                    {
+                        ParameterName = "@CreatDate",
+                        Value = DateTime.Now
+                    };
+                    cmd.Parameters.Add(sqlParamCreatDate);
 
-                SqlParameter sqlParamMofiyDate = new SqlParameter
-                {
-                    ParameterName = "@MofiyDate",
-                    Value = DateTime.Now
-                };
-                cmd.Parameters.Add(sqlParamMofiyDate);
+                    SqlParameter sqlParamMofiyDate = new SqlParameter
+                    {
+                        ParameterName = "@MofiyDate",
+                        Value = DateTime.Now
+                    };
+                    cmd.Parameters.Add(sqlParamMofiyDate);
 
-                SqlParameter sqlParamDelete = new SqlParameter
-                {
-                    ParameterName = "@Delete",
-                    Value = user.Delete
-                };
-                cmd.Parameters.Add(sqlParamDelete);
+                    SqlParameter sqlParamDelete = new SqlParameter
+                    {
+                        ParameterName = "@Delete",
+                        Value = user.Delete
+                    };
+                    cmd.Parameters.Add(sqlParamDelete);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
-            }
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+             }
         }
         #endregion
-
-
-
 
         #region 更新
         public void SaveUser(User user)
@@ -173,13 +185,6 @@ namespace Library
                 };
                 cmd.Parameters.Add(sqlParamUserName);
 
-                SqlParameter sqlParamCreatDate = new SqlParameter
-                {
-                    ParameterName = "@CreatDate",
-                    Value = DateTime.Now
-                };
-                cmd.Parameters.Add(sqlParamCreatDate);
-
                 SqlParameter sqlParamMofiyDate = new SqlParameter
                 {
                     ParameterName = "@MofiyDate",
@@ -221,28 +226,29 @@ namespace Library
             }
         }
         #endregion
-
         #region 驗證帳號重複
-        public void CheckAccount_Get(string UserAccount)
+        public bool CheckAccount(string UserAccount)
         {
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
             {
                 SqlCommand cmd = new SqlCommand(SPName.User.CheckAccount_Get, con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                cmd.Parameters.AddWithValue("@UserAccount", UserAccount);
+                using (SqlDataReader dr = cmd.ExecuteReader())
                 {
-                    if(dr.HasRows)
-                     { 
-                        MessageBox.Show("己有此筆資料");
-                        dr.Close(); 
-	                    return; 
-                      } 
+                    while (dr.Read())
+                    {
+                        if (dr.HasRows)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
             }
         }
-
         #endregion
+
     }
 }

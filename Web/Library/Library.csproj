@@ -63,9 +63,9 @@
     <Compile Include="DBServer\MessageWeb.cs" />
     <Compile Include="Models\Reply.cs" />
     <Compile Include="DBServer\ReplyWeb.cs" />
+    <Compile Include="Models\NewUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="DBServer\UserWeb.cs" />
-    <Compile Include="Models\UserMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\MessageReply.cs" />
     <Compile Include="WebShare\WebShareConst.cs" />

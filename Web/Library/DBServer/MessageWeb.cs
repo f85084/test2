@@ -99,7 +99,7 @@ namespace Library
                 {
                     ParameterName = "@UserName",
                     SqlDbType= SqlDbType.NVarChar,
-                    Size=20,
+                    Size = 20,
                     Value = message.UserName
                 };
                 cmd.Parameters.Add(sqlParamUserName);

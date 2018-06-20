@@ -17,11 +17,6 @@ namespace Library.DBServer
             internal const string User_Get = "usp_User_Get";
 
             /// <summary>
-            /// 取得相同使用者
-            /// </summary>
-            internal const string CheckAccount_Get = "usp_User_CheckAccount_Get";
-
-            /// <summary>
             /// 新增使用者資料
             /// </summary>
             internal const string User_Add = "usp_User_Add";
@@ -35,6 +30,11 @@ namespace Library.DBServer
             /// 刪除使用者資料
             /// </summary>
             internal const string User_Delete = "usp_User_Delete";
+
+            /// <summary>
+            /// 取得相同使用者
+            /// </summary>
+            internal const string CheckAccount_Get = "usp_User_CheckAccount_Get";
         }
 
         public struct Message

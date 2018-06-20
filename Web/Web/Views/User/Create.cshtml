@@ -6,6 +6,8 @@
     <div class="table-responsive">
         <h2>建立會員</h2>
 
+
+
         @using (Html.BeginForm("Create", "User"))
         {
             @Html.AntiForgeryToken()
@@ -15,7 +17,7 @@
                     @Html.Label("UserAccount", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.UserAccount)
-                        @*<h3>@ViewBag.Message</h3>*@
+                        <span style="color:red">@ViewBag.Msg</span>
                         @Html.ValidationMessageFor(model => model.UserAccount, "", new { @class = "text-danger" })
                     </div>
                 </div>
