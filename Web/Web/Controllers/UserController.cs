@@ -9,8 +9,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.Security;
 using System;
-
-
+using System.Web;
 
 namespace Web.Controllers
 {
@@ -25,6 +24,7 @@ namespace Web.Controllers
         /// 會員首頁取得
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public ActionResult Index()
         {
             List<Library.User> users = userWeb.GetUsers()
@@ -40,6 +40,7 @@ namespace Web.Controllers
         /// 建立會員
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Create()
         {
@@ -56,24 +57,15 @@ namespace Web.Controllers
             {
                 return View("Create");
             }
-            //var CheckUserAccount = userWeb.GetUsers();
 
-            //if (CheckUserAccount.Any(u => u.UserAccount == UserAccount))
-            //{
-            //    ModelState.AddModelError("UserAccount", "帳號已註冊過!");
-            //    return View();
-            //}
-
-
-            //驗證帳號
-            if (userWeb.CheckAccount(UserAccount))
+            bool isSuccess = userWeb.AddUser(user);
+            if (isSuccess)
             {
                 ViewBag.Msg = "帳號已註冊過";
                 return View();
             }
-            else
-            {
-                userWeb.AddUser(user);
+                else {
+                        
                 if (UserClass == 0)
                 {
                     return RedirectToAction("Index");
@@ -83,6 +75,7 @@ namespace Web.Controllers
                     return RedirectToAction("Index", "Message");
                 }
             }
+           
         }
         #endregion
 
@@ -163,49 +156,55 @@ namespace Web.Controllers
         #endregion
 
         #region 會員登入
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Logon(LogonViewModel logonModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View();
-        //    }
-        //    /*
-        //    var systemuser = db.SystemUsers
-        //        .Include(x => x.SystemRoles)
-        //        .FirstOrDefault(x => x.Account == logonModel.Account);
-        //        */
 
-        //    UserWeb userWeb = new UserWeb();
-        //    //List<Library.User> users = userWeb.Users.ToList();
-        //    //users = userWeb.Users
-        //    //        .Where(x => x.UserAccount == logonModel.UserAccount)
-        //    //        .ToList();
+        /// <summary>
+        /// 會員登入
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
 
-        //    var userAccount = userWeb.Users
-        //       .Where(x => x.UserAccount == logonModel.UserAccount);
+        [HttpPost]
+        public ActionResult Login(Library.CheckLogin user, string UserAccount, string Password)
+        {
+            //驗證帳號
+            if (userWeb.CheckAccount(UserAccount))
+            {
+                //驗證密碼
+                if (userWeb.CheckPassword(UserAccount, Password))
+                {
+                    Session["UserAccount"] = UserAccount;
+                    List<Library.User> users = userWeb.GetUsers()
+                   .Where(x => x.UserAccount == UserAccount)
+                   .ToList();
+                    foreach (Library.User item in users)
+                    {
+                        int Id =item.Id;
+                        int UserClass = item.UserClass;
+                        Session["Id"] = Id;
+                        Session["UserClass"] = UserClass;
+                    }
+
+                    return RedirectToAction("Index", "Message");
+                }
+                else
+                {
+                    ViewBag.Msg = "密碼輸入錯誤...";
+                    return View();
+                }
+            }
+            else
+            {
+                ViewBag.Msg = "找不到帳號...";
+                return View();
+            }
 
 
-        //    if (userAccount == null)
-        //    {
-        //        ModelState.AddModelError("", "請輸入正確的帳號或密碼!");
-        //        return View();
-        //    }
-
-        //    var password = CryptographyPassword(logonModel.Password, BaseController.PasswordSalt);
-
-        //    if (userAccount.Password.Equals(password))
-        //    {
-        //        //this.LoginProcess(userAccount);
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError("", "請輸入正確的帳號或密碼!");
-        //        return View();
-        //    }
-        //}
+        }
         #endregion
 
 

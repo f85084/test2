@@ -21,6 +21,7 @@ namespace Web.Controllers
         /// 留言首頁取得 
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public ActionResult Index()
         {
             List<MessageReply> model = messageWeb.GetMessageReplys().ToList();       
@@ -46,6 +47,7 @@ namespace Web.Controllers
         /// 建立留言
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Create()
         {

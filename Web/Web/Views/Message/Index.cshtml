@@ -2,10 +2,25 @@
 @model List<MessageReply>
 @{
     ViewBag.Title = "留言板";
+
+
+    //var UserAccount = "";
+    //var Id = "";
+    //var UserClass = "";
+
+    //if (Session["UserAccount"] != null)
+    //{
+    //    UserAccount = Session["UserAccount"].ToString();
+    //    Id = Session["Id"].ToString();
+    //    UserClass = Session["UserClass"].ToString();
+    //}
 }
 
 <div class="row">
     <h2>留言板</h2>
+    @*<h5>歡迎登入: @UserAccount</h5>
+    <h5>帳號: @Id</h5>
+    <h5>會員類別:@UserClass</h5>*@
     <div class="table-responsive">
         <div class="col-sm-7">
             <button type="button" class="btn btn-primary btn-sm " style="margin-top:10px ;margin-bottom:10px;" value="建立新的留言" onclick="location.href='@Url.Action("Create", "Message")'">建立新的留言</button>

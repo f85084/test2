@@ -12,15 +12,6 @@ namespace Library
 {
     public class UserWeb
     {
-        public IEnumerable<User> user
-        {
-            get;
-            set;
-        }
-        public string UserAccount { get; set; }
-
-
-
         #region 讀取
         public IEnumerable<User> GetUsers()
         {
@@ -52,83 +43,100 @@ namespace Library
         #endregion
 
         #region 新增帳號
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
 
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
             {
-                    SqlCommand cmd = new SqlCommand(SPName.User.User_Add, con)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
+                SqlCommand cmd = new SqlCommand(SPName.User.User_Add, con)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
 
-                    SqlParameter sqlParamUserAccount = new SqlParameter
-                    {
-                        ParameterName = "@UserAccount",
-                        SqlDbType = SqlDbType.NVarChar,
-                        Size = 50,
-                        Value = user.UserAccount
-                    };
-                    cmd.Parameters.Add(sqlParamUserAccount);
+                SqlParameter returnValue = new SqlParameter("@Id", SqlDbType.Int);
+                returnValue.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(returnValue);
 
-                    SqlParameter sqlParamUserClass = new SqlParameter
-                    {
-                        ParameterName = "@UserClass",
-                        Value = user.UserClass
-                    };
-                    cmd.Parameters.Add(sqlParamUserClass);
+                SqlParameter sqlParamUserAccount = new SqlParameter
+                {
+                    ParameterName = "@UserAccount",
+                    SqlDbType = SqlDbType.NVarChar,
+                    Size = 50,
+                    Value = user.UserAccount
+                };
+                cmd.Parameters.Add(sqlParamUserAccount);
 
-                    SqlParameter sqlParamEmail = new SqlParameter
-                    {
-                        ParameterName = "@Email",
-                        SqlDbType = SqlDbType.NVarChar,
-                        Size = 50,
-                        Value = user.Email
-                    };
-                    cmd.Parameters.Add(sqlParamEmail);
+                SqlParameter sqlParamUserClass = new SqlParameter
+                {
+                    ParameterName = "@UserClass",
+                    Value = user.UserClass
+                };
+                cmd.Parameters.Add(sqlParamUserClass);
 
-                    SqlParameter sqlParamPassword = new SqlParameter
-                    {
-                        ParameterName = "@Password",
-                        SqlDbType = SqlDbType.NVarChar,
-                        Size = 20,
-                        Value = user.Password
-                    };
-                    cmd.Parameters.Add(sqlParamPassword);
+                SqlParameter sqlParamEmail = new SqlParameter
+                {
+                    ParameterName = "@Email",
+                    SqlDbType = SqlDbType.NVarChar,
+                    Size = 50,
+                    Value = user.Email
+                };
+                cmd.Parameters.Add(sqlParamEmail);
 
-                    SqlParameter sqlParamUserName = new SqlParameter
-                    {
-                        ParameterName = "@UserName",
-                        SqlDbType = SqlDbType.NVarChar,
-                        Size = 20,
-                        Value = user.UserName
-                    };
-                    cmd.Parameters.Add(sqlParamUserName);
+                SqlParameter sqlParamPassword = new SqlParameter
+                {
+                    ParameterName = "@Password",
+                    SqlDbType = SqlDbType.NVarChar,
+                    Size = 20,
+                    Value = user.Password
+                };
+                cmd.Parameters.Add(sqlParamPassword);
 
-                    SqlParameter sqlParamCreatDate = new SqlParameter
-                    {
-                        ParameterName = "@CreatDate",
-                        Value = DateTime.Now
-                    };
-                    cmd.Parameters.Add(sqlParamCreatDate);
+                SqlParameter sqlParamUserName = new SqlParameter
+                {
+                    ParameterName = "@UserName",
+                    SqlDbType = SqlDbType.NVarChar,
+                    Size = 20,
+                    Value = user.UserName
+                };
+                cmd.Parameters.Add(sqlParamUserName);
 
-                    SqlParameter sqlParamMofiyDate = new SqlParameter
-                    {
-                        ParameterName = "@MofiyDate",
-                        Value = DateTime.Now
-                    };
-                    cmd.Parameters.Add(sqlParamMofiyDate);
+                SqlParameter sqlParamCreatDate = new SqlParameter
+                {
+                    ParameterName = "@CreatDate",
+                    Value = DateTime.Now
+                };
+                cmd.Parameters.Add(sqlParamCreatDate);
 
-                    SqlParameter sqlParamDelete = new SqlParameter
-                    {
-                        ParameterName = "@Delete",
-                        Value = user.Delete
-                    };
-                    cmd.Parameters.Add(sqlParamDelete);
+                SqlParameter sqlParamMofiyDate = new SqlParameter
+                {
+                    ParameterName = "@MofiyDate",
+                    Value = DateTime.Now
+                };
+                cmd.Parameters.Add(sqlParamMofiyDate);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-             }
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = user.Delete
+                };
+                cmd.Parameters.Add(sqlParamDelete);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                string Value = returnValue.Value.ToString();
+
+                if (Value == "")
+                {
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
         }
         #endregion
 
@@ -226,7 +234,13 @@ namespace Library
             }
         }
         #endregion
-        #region 驗證帳號重複
+
+        #region 會員登入驗證
+        /// <summary>
+        /// 檢查有無帳號
+        /// </summary>
+        /// <param name="UserAccount"><帳號/param>
+        /// <returns></returns>
         public bool CheckAccount(string UserAccount)
         {
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
@@ -248,6 +262,36 @@ namespace Library
                 }
             }
         }
+
+        /// <summary>
+        /// 檢查帳號密碼是否正確
+        /// </summary>
+        /// <param name="UserAccount">帳號</param>
+        /// <param name="Password">密碼</param>
+        /// <returns></returns>
+        public bool CheckPassword(string UserAccount, string Password)
+        {
+            using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
+            {
+                SqlCommand cmd = new SqlCommand(SPName.User.CheckLoginAccount_Get, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                con.Open();
+                cmd.Parameters.AddWithValue("@UserAccount", UserAccount);
+                cmd.Parameters.AddWithValue("@Password", Password);
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        if (dr.HasRows)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+
         #endregion
 
     }
