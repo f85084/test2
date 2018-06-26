@@ -98,6 +98,15 @@ namespace Web.Controllers
             {
                 return HttpNotFound();
             }
+
+            if(user.UserClass == 0)
+            {
+                ViewBag.UserClass = " 管理員";
+            }
+            else
+            {
+                ViewBag.UserClass = " 一般";
+            }
             return View(user);
         }
         #endregion
@@ -169,41 +178,30 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Library.CheckLogin user, string UserAccount, string Password)
+        public ActionResult Login(Library.User user, string UserAccount, string Password)
         {
-            //驗證帳號
-            if (userWeb.CheckAccount(UserAccount))
+        //驗證帳號和密碼
+            if (userWeb.CheckPassword(UserAccount, Password))
             {
-                //驗證密碼
-                if (userWeb.CheckPassword(UserAccount, Password))
+                Session["UserAccount"] = UserAccount;
+                List<Library.User> users = userWeb.GetUsers()
+               .Where(x => x.UserAccount == UserAccount)
+               .ToList();
+                foreach (Library.User item in users)
                 {
-                    Session["UserAccount"] = UserAccount;
-                    List<Library.User> users = userWeb.GetUsers()
-                   .Where(x => x.UserAccount == UserAccount)
-                   .ToList();
-                    foreach (Library.User item in users)
-                    {
-                        int Id =item.Id;
-                        int UserClass = item.UserClass;
-                        Session["Id"] = Id;
-                        Session["UserClass"] = UserClass;
-                    }
+                    int Id = item.Id;
+                    int UserClass = item.UserClass;
+                    Session["Id"] = Id;
+                    Session["UserClass"] = UserClass;
+                }
 
-                    return RedirectToAction("Index", "Message");
-                }
-                else
-                {
-                    ViewBag.Msg = "密碼輸入錯誤...";
-                    return View();
-                }
+                return RedirectToAction("Index", "Message");
             }
             else
             {
-                ViewBag.Msg = "找不到帳號...";
+                ViewBag.Msg = "帳號或密碼輸入錯誤...";
                 return View();
             }
-
-
         }
         #endregion
 

@@ -1,6 +1,5 @@
 ﻿@model Library.User
 @{
-    int? UserClass = null;
 }
 <div class="row">
     <h2>基本資料編輯</h2>
@@ -19,16 +18,16 @@
                     @Html.ValidationMessageFor(model => model.UserAccount, "", new { @class = "text-danger" })
                 </div>
             </div>
-            @if (UserClass == 0 || UserClass == null)
+            @if (byte.Parse(Session["UserClass"].ToString()) == 0)
             {
                 <div class="form-group">
                     @Html.LabelFor(model => model.UserClass, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownList("UserClass", new List<SelectListItem>
-                            {
-                                new SelectListItem{Text = "管理員", Value = "0"},
-                                new SelectListItem{Text = "一般使用者", Value = "1"}
-                            }, "請選擇會員身分")
+                                {
+                                    new SelectListItem{Text = "管理員", Value = "0"},
+                                    new SelectListItem{Text = "一般使用者", Value = "1"}
+                                }, "請選擇會員身分")
                         @Html.ValidationMessageFor(model => model.UserClass, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -55,19 +54,19 @@
                 </div>
             </div>
 
-            @if (UserClass == 0 || UserClass == null)
+            @if (byte.Parse(Session["UserClass"].ToString()) == 0)
             {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Delete, new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("Delete", new List<SelectListItem>
-                        {
-                            new SelectListItem{Text = "顯示", Value = "true"},
-                            new SelectListItem{Text = "刪除", Value = "false"}
-                        }, "會員狀態")
-                    @Html.ValidationMessageFor(model => model.Delete, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Delete, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("Delete", new List<SelectListItem>
+                            {
+                                new SelectListItem{Text = "顯示", Value = "false"},
+                                new SelectListItem{Text = "刪除", Value = "true"}
+                            }, "會員狀態")
+                        @Html.ValidationMessageFor(model => model.Delete, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
             }
             else
             {
@@ -81,9 +80,9 @@
         </div>
     }
 
- 
 
-    @if (UserClass == 0)
+
+    @if (byte.Parse(Session["UserClass"].ToString()) == 0)
     {
         <div>
             @Html.ActionLink("回到前一頁", "Index")

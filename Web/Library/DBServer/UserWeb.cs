@@ -237,33 +237,6 @@ namespace Library
 
         #region 會員登入驗證
         /// <summary>
-        /// 檢查有無帳號
-        /// </summary>
-        /// <param name="UserAccount"><帳號/param>
-        /// <returns></returns>
-        public bool CheckAccount(string UserAccount)
-        {
-            using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
-            {
-                SqlCommand cmd = new SqlCommand(SPName.User.CheckAccount_Get, con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                cmd.Parameters.AddWithValue("@UserAccount", UserAccount);
-                using (SqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        if (dr.HasRows)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-
-        /// <summary>
         /// 檢查帳號密碼是否正確
         /// </summary>
         /// <param name="UserAccount">帳號</param>

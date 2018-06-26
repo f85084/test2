@@ -24,9 +24,23 @@ namespace Web.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            List<MessageReply> model = messageWeb.GetMessageReplys().ToList();       
+            List<MessageReply> model = messageWeb.GetMessageReplys().ToList();
+            string UserAccount = "";
+            int Id = 0;
+            byte UserClass = 0;
+
+            if (Session["UserAccount"] != null)
+            {
+                UserAccount = Session["UserAccount"].ToString();
+                ViewBag.UserAccount = UserAccount;
+                int.TryParse(Session["Id"].ToString(), out Id);
+                ViewBag.Id = Id;
+                byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+                ViewBag.UserClass = UserClass;
+            }
             return View(model);
         }
+
         #endregion
 
         #region 管理員留言首頁取得 
