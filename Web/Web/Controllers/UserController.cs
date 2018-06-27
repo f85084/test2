@@ -99,13 +99,13 @@ namespace Web.Controllers
                 return HttpNotFound();
             }
 
-            if(user.UserClass == 0)
+            if(user.UserClass == 1)
             {
-                ViewBag.UserClass = " 管理員";
+                ViewBag.UserClass = "管理員";
             }
             else
             {
-                ViewBag.UserClass = " 一般";
+                ViewBag.UserClass = "一般";
             }
             return View(user);
         }
@@ -210,5 +210,18 @@ namespace Web.Controllers
         #endregion
 
 
+        #region 會員登出
+
+        /// <summary>
+        /// 會員登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Message");
+        }
+        #endregion
     }
 }

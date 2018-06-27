@@ -66,7 +66,7 @@ namespace Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult Create(int? userId)
+        public ActionResult Create()
         {
             Message model = new Message();
 
@@ -75,16 +75,18 @@ namespace Web.Controllers
             if (Session["UserAccount"] != null)
             {
                 int.TryParse(Session["Id"].ToString(), out Id);
-                ViewBag.userId = Id;
+                model.UserId = Id;
                 UserName = Session["UserName"].ToString();
-                ViewBag.UserName = UserName;
+                model.UserName = UserName;
             }
 
             return View(model);
         }
 
+
+
         [HttpPost]
-        public ActionResult Create(Library.Message message ,int? userId)
+        public ActionResult Create(Library.Message message)
         {
             if (!ModelState.IsValid)
             {

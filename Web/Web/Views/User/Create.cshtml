@@ -1,6 +1,14 @@
 ﻿@model Library.User
 @{
-    int? UserClass = 1;
+    ViewBag.Title = "建立會員";
+    int Id = 0;
+    byte UserClass = 0;
+
+    if (Session["Id"] != null)
+    {
+        int.TryParse(Session["Id"].ToString(), out Id);
+        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+    }
 }
 <div class="row">
     <div class="table-responsive">
@@ -21,7 +29,7 @@
                         @Html.ValidationMessageFor(model => model.UserAccount, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                @if (UserClass == 0 || UserClass == null)
+                @if (UserClass == 2 )
                 {
                     <div class="form-group">
                         @Html.Label("UserClass", new { @class = "control-label col-md-2" })
@@ -71,7 +79,7 @@
                         @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                @if (UserClass == 0)
+                @if (UserClass == 2)
                 {
                     <div class="form-group">
                         @Html.Label("Delete", new { @class = "control-label col-md-2" })
@@ -96,7 +104,7 @@
                 </div>
             </div>
         }
-        @if (UserClass == 0)
+        @if (UserClass == 2)
         {
             <div>
                 @Html.ActionLink("回到列表", "Index")

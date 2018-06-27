@@ -1,7 +1,15 @@
 ﻿@model Library.Message
 
 @{ 
+    ViewBag.Title = "新增留言";
+    int Id = 0;
+    byte UserClass = 0;
 
+    if (Session["Id"] != null)
+    {
+        int.TryParse(Session["Id"].ToString(), out Id);
+        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+    }
 }
 
 
@@ -13,15 +21,13 @@
         @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 
         <div class="form-horizontal">
-               @Html.Hidden("UserId", new { ViewBag.userId })
-
+            @if (Id != 0){
+                 @Html.HiddenFor(model => model.UserId)
+            }
             <div class="form-group">
                 @Html.Label("UserName", "名稱", new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "", @Value = ViewBag.UserName } })
-                    @*@Html.EditorFor(@ViewBag.UserName)
-                        @Html.TextBox("UserName", ViewBag.UserName)*@
-
+                    @Html.EditorFor(model => model.UserName)
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                 </div>
             </div>

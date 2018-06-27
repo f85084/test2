@@ -40,18 +40,18 @@
                     {
                         <li>@Html.ActionLink("登入", "Login", "User")</li>
                     }
-                    else if(UserClass != 0)
+                    else if(UserClass != 2)
                     {
                         <li>@Html.ActionLink("基本資料", "Edit", "User", new { Id = Id }, "")</li>
                     }
-                    else if(UserClass == 0)
+                    else if(UserClass == 2)
                     {
                         <li>@Html.ActionLink("會員資料", "Index", "User")</li>
                         <li>@Html.ActionLink("會員留言", "ManageIndex", "Message")</li>
                     }
                      @if (Id != 0)
                     {
-                        <li>@Html.ActionLink("登出", "Login", "User")</li>
+                        <li>@Html.ActionLink("登出", "Logout", "User")</li>
                     }
 
                 </ul>

@@ -229,6 +229,12 @@ namespace Library
                 };
                 cmd.Parameters.Add(sqlParamId);
 
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = 1
+                };
+                cmd.Parameters.Add(sqlParamDelete);
                 con.Open();
                 cmd.ExecuteNonQuery();
             }

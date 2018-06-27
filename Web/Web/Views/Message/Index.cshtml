@@ -2,6 +2,14 @@
 @model List<MessageReply>
 @{
     ViewBag.Title = "留言板";
+    int Id = 0;
+    byte UserClass = 0;
+
+    if (Session["Id"] != null)
+    {
+        int.TryParse(Session["Id"].ToString(), out Id);
+        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+    }
 
 }
 
@@ -15,7 +23,7 @@
     }
     <div class="table-responsive">
         <div class="col-sm-7">
-            <button type="button" class="btn btn-primary btn-sm " style="margin-top:10px ;margin-bottom:10px;" value="建立新的留言" onclick="location.href='@Url.Action("Create", "Message", new { userId = @ViewBag.Id }, "")'">建立新的留言</button>
+            <button type="button" class="btn btn-primary btn-sm " style="margin-top:10px ;margin-bottom:10px;" value="建立新的留言" onclick="location.href='@Url.Action("Create", "Message")'">建立新的留言</button>
         </div>
 
         <div class="col-sm-7">
@@ -34,23 +42,31 @@
                             <ul>
                                 @Html.Label("留言日期") : @Html.DisplayFor(modelItem => item.Messages.CreatDate)
                             </ul>
-
+                            @if (UserClass == 2)
+                            {
+                              <input type="submit" class="btn btn-primary btn-sm" value="刪除" onclick="return confirm('確定要刪除嗎? 名稱 = @item.Messages.UserName , 留言內容 = @item.Messages.Context');" />
+                            }
                         </div>
                         <div class="card-body">
                             <h5>回覆內容</h5>
                             @foreach (Reply reply in item.ReplyList)
                             {
-                                <ul>
-                                    @Html.Label("會員暱稱")  : @Html.DisplayFor(modelItem => reply.UserName)
-                                </ul>
-                                <ul>
-                                    @Html.Label("回覆內容") :  @Html.DisplayFor(modelItem => reply.Context)
-                                </ul>
-                                <ul>
-                                    @Html.Label("回覆日期") :  @Html.DisplayFor(modelItem => reply.CreatDate)
-                                </ul>
+                        <ul>
+                            @Html.Label("會員暱稱")  : @Html.DisplayFor(modelItem => reply.UserName)
+                        </ul>
+                        <ul>
+                            @Html.Label("回覆內容") :  @Html.DisplayFor(modelItem => reply.Context)
+                        </ul>
+                        <ul>
+                            @Html.Label("回覆日期") :  @Html.DisplayFor(modelItem => reply.CreatDate)
+                        </ul>
+                                if(UserClass == 2)
+                                {
+                                  <input type="submit" class="btn btn-primary btn-sm" value="刪除" onclick="return confirm('確定要刪除嗎? 名稱 = @reply.UserName , 回覆內容 = @reply.Context');" />
+                                 }
                                 <hr />
                             }
+                                                    
                             <input type="button" class="btn btn-primary btn-sm" value="回覆" onclick="location.href='@Url.Action("Create", "Reply", new {  messageId = item.Messages.Id })'" />
                         </div>
                     </div>

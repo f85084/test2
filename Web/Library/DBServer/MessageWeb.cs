@@ -39,6 +39,7 @@ namespace Library
                         Message msg = new Message()
                         {
                             Id = Convert.ToInt32(dr["Message_Id"]),
+                            UserId = Convert.ToInt32(dr["Message_UserId"]),
                             UserName = dr["Message_UserName"].ToString(),
                             Context = dr["Message_Context"].ToString(),
                             CreatDate = Convert.ToDateTime(dr["Message_CreatDate"].ToString())
@@ -192,6 +193,13 @@ namespace Library
                     Value = id
                 };
                 cmd.Parameters.Add(sqlParamId);
+
+                SqlParameter sqlParamDelete = new SqlParameter
+                {
+                    ParameterName = "@Delete",
+                    Value = 1
+                };
+                cmd.Parameters.Add(sqlParamDelete);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
