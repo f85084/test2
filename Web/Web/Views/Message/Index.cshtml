@@ -9,13 +9,13 @@
     <h2>留言板</h2>
     @if (Session["UserAccount"] != null)
     {
-    <h5>@ViewBag.useraccount ,你好</h5>
+    <h5>@ViewBag.UserName ,你好</h5>
     <h5>帳號: @ViewBag.Id</h5>
     <h5>會員類別:@ViewBag.Userclass</h5>
     }
     <div class="table-responsive">
         <div class="col-sm-7">
-            <button type="button" class="btn btn-primary btn-sm " style="margin-top:10px ;margin-bottom:10px;" value="建立新的留言" onclick="location.href='@Url.Action("Create", "Message")'">建立新的留言</button>
+            <button type="button" class="btn btn-primary btn-sm " style="margin-top:10px ;margin-bottom:10px;" value="建立新的留言" onclick="location.href='@Url.Action("Create", "Message", new { userId = @ViewBag.Id }, "")'">建立新的留言</button>
         </div>
 
         <div class="col-sm-7">

@@ -7,16 +7,21 @@
 
 <div class="row">
     <h2>新增留言</h2>
+
     @using (Html.BeginForm("Create", "Message"))
     {
         @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 
         <div class="form-horizontal">
-            @Html.HiddenFor(m => m.UserId)
+               @Html.Hidden("UserId", new { ViewBag.userId })
+
             <div class="form-group">
                 @Html.Label("UserName", "名稱", new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.UserName)
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "", @Value = ViewBag.UserName } })
+                    @*@Html.EditorFor(@ViewBag.UserName)
+                        @Html.TextBox("UserName", ViewBag.UserName)*@
+
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                 </div>
             </div>

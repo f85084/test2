@@ -2,7 +2,6 @@
 @*@using Library;
     @model IEnumerable<Library.Reply>*@
 @{
-    int? UserId = 0;
     int? UserClass = 1;
 }
 
@@ -11,40 +10,32 @@
 
     @using (Html.BeginForm("Create", "Reply"))
          {
-        <div class="form-horizontal">
-            @Html.Hidden("MessageId", new { ViewBag.MessageId })
-            @if ((UserId == 0) || (UserId == null))
-            {
-                @Html.Hidden("UserId", UserId)
-            }
-            else
-            {
-                @Html.Hidden("UserId", UserId)
-            }
+    <div class="form-horizontal">
+        @Html.Hidden("MessageId", new { ViewBag.MessageId })
 
-            <div class="form-group">
-                @Html.Label("UserName", "名稱", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.UserName)
-                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Context", "內容", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextArea("Context", "", 6, 60, new { style = "border: solid 1px #ccc; border-radius: 0.25rem; " })
-                    @Html.ValidationMessageFor(model => model.Context, "", new { @class = "text-danger" })
-                </div>
-            </div>
-                 @Html.Hidden("Delete", "true")
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="回覆" class="btn btn-default  " />
-                </div>
+        <div class="form-group">
+            @Html.Label("UserName", "名稱", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.Label("Context", "內容", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextArea("Context", "", 6, 60, new { style = "border: solid 1px #ccc; border-radius: 0.25rem; " })
+                @Html.ValidationMessageFor(model => model.Context, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.Hidden("Delete", "true")
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="回覆" class="btn btn-default  " />
+            </div>
+        </div>
+    </div>
     }
     @if ((UserClass == 0) || (UserClass == null))
     {

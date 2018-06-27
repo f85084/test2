@@ -135,7 +135,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "Id,UserAccount, UserClass, Email, Password, UserName")]Library.User user)
+        public ActionResult Edit([Bind(Include = "Id,UserAccount, UserClass, Email, Password, RePassword, UserName")]Library.User user)
         {
             user.Id = userWeb.GetUsers().Single(g => g.Id == user.Id).Id;
 
@@ -145,7 +145,15 @@ namespace Web.Controllers
             }
 
             userWeb.SaveUser(user);
-            return RedirectToAction("Index");
+            if (user.UserClass == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Message");
+            }
+                
         }
         #endregion
 
@@ -184,16 +192,12 @@ namespace Web.Controllers
             if (userWeb.CheckPassword(UserAccount, Password))
             {
                 Session["UserAccount"] = UserAccount;
-                List<Library.User> users = userWeb.GetUsers()
-               .Where(x => x.UserAccount == UserAccount)
-               .ToList();
-                foreach (Library.User item in users)
-                {
-                    int Id = item.Id;
-                    int UserClass = item.UserClass;
-                    Session["Id"] = Id;
-                    Session["UserClass"] = UserClass;
-                }
+                var users = userWeb.GetUsers().ToList()
+                .First(x => x.UserAccount == UserAccount);
+
+                    Session["Id"] = users.Id;
+                    Session["UserClass"] = users.UserClass;
+                    Session["UserName"] = users.UserName;
 
                 return RedirectToAction("Index", "Message");
             }

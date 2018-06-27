@@ -26,6 +26,7 @@ namespace Web.Controllers
         {
             List<MessageReply> model = messageWeb.GetMessageReplys().ToList();
             string UserAccount = "";
+            string UserName = "";
             int Id = 0;
             byte UserClass = 0;
 
@@ -33,6 +34,8 @@ namespace Web.Controllers
             {
                 UserAccount = Session["UserAccount"].ToString();
                 ViewBag.UserAccount = UserAccount;
+                UserName = Session["UserName"].ToString();
+                ViewBag.UserName = UserName;
                 int.TryParse(Session["Id"].ToString(), out Id);
                 ViewBag.Id = Id;
                 byte.TryParse(Session["UserClass"].ToString(), out UserClass);
@@ -63,31 +66,32 @@ namespace Web.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int? userId)
         {
             Message model = new Message();
-            bool isLogin = true;
 
-            if (isLogin)
+            string UserName = "";
+            int Id = 0;
+            if (Session["UserAccount"] != null)
             {
-            }
-            else
-            {
-                model.UserId = 0;
+                int.TryParse(Session["Id"].ToString(), out Id);
+                ViewBag.userId = Id;
+                UserName = Session["UserName"].ToString();
+                ViewBag.UserName = UserName;
             }
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(Library.Message message)
+        public ActionResult Create(Library.Message message ,int? userId)
         {
             if (!ModelState.IsValid)
             {
                 return View("Create");
             }
 
-            messageWeb.AddMessage(message);
+                messageWeb.AddMessage(message);
             return RedirectToAction("Index");
         }
         #endregion
@@ -105,6 +109,33 @@ namespace Web.Controllers
             messageWeb.DeleteMessage(id);
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #region Session登入取得資料
+        /// <summary>
+        /// Session登入取得資料
+        /// </summary>
+        /// <returns></returns>
+        //public string SessionGet()
+        //{
+        //    string UserAccount = "";
+        //    string UserName = "";
+        //    int Id = 0;
+        //    byte UserClass = 0;
+        //    if (Session["UserAccount"] != null)
+        //    {
+        //        UserAccount = Session["UserAccount"].ToString();
+        //        ViewBag.UserAccount = UserAccount;
+        //        UserName = Session["UserName"].ToString();
+        //        ViewBag.UserName = UserName;
+        //        int.TryParse(Session["Id"].ToString(), out Id);
+        //        ViewBag.Id = Id;
+        //        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+        //        ViewBag.UserClass = UserClass;
+        //    }
+        //    return ();
+        //}
+
         #endregion
 
     }
