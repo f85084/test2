@@ -13,9 +13,6 @@
 <div class="row">
     <div class="table-responsive">
         <h2>建立會員</h2>
-
-
-
         @using (Html.BeginForm("Create", "User"))
         {
             @Html.AntiForgeryToken()
@@ -36,7 +33,7 @@
                         <div class="col-md-10">
                             @Html.DropDownList("UserClass", new List<SelectListItem>
                                                 {
-                                                    new SelectListItem{Text = "管理員", Value = "0"},
+                                                    new SelectListItem{Text = "管理員", Value = "2"},
                                                     new SelectListItem{Text = "一般使用者", Value = "1"}
                                                 }, "請選擇會員身分")
                             @Html.ValidationMessageFor(model => model.UserClass, "", new { @class = "text-danger" })
@@ -88,7 +85,7 @@
                                                 {
                                                     new SelectListItem{Text = "顯示", Value = "false"},
                                                     new SelectListItem{Text = "刪除", Value = "true"}
-                                                }, "會員狀態")
+                                                }, "請選擇會員狀態")
                             @Html.ValidationMessageFor(model => model.Delete, "", new { @class = "text-danger" })
                         </div>
                     </div>

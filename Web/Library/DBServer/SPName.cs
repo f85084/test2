@@ -90,6 +90,12 @@ namespace Library.DBServer
             /// </summary>
             internal const string MessageRely_Get = "usp_MessageRely_Get";
 
+            /// <summary>
+            /// 取得留言回覆資料
+            /// </summary>
+            internal const string Rely2_Get = "usp_Rely2_Get";
+            
+
         }
 
     }

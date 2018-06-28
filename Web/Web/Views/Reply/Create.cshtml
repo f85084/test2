@@ -15,7 +15,7 @@
     <h2>回覆留言</h2>
 
     @using (Html.BeginForm("Create", "Reply"))
-         {
+      {
     <div class="form-horizontal">
         @Html.Hidden("MessageId", new { ViewBag.MessageId })
            @if (Id != 0){
@@ -37,7 +37,7 @@
                 @Html.ValidationMessageFor(model => model.Context, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Hidden("Delete", "true")
+        @Html.Hidden("Delete", "false")
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

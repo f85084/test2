@@ -250,6 +250,7 @@ namespace Library
         /// <returns></returns>
         public bool CheckPassword(string UserAccount, string Password)
         {
+            User users = new User();
             using (SqlConnection con = new SqlConnection(DBConnection.ConnectString))
             {
                 SqlCommand cmd = new SqlCommand(SPName.User.CheckLoginAccount_Get, con);
@@ -270,7 +271,6 @@ namespace Library
                 }
             }
         }
-
         #endregion
 
     }

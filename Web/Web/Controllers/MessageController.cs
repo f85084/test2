@@ -83,8 +83,6 @@ namespace Web.Controllers
             return View(model);
         }
 
-
-
         [HttpPost]
         public ActionResult Create(Library.Message message)
         {
@@ -109,7 +107,7 @@ namespace Web.Controllers
         {
             MessageWeb messageWeb = new MessageWeb();
             messageWeb.DeleteMessage(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("ManageIndex", "Message");
         }
         #endregion
 
@@ -139,6 +137,37 @@ namespace Web.Controllers
         //}
 
         #endregion
+
+        #region 留言首頁取得 
+        /// <summary>
+        /// 留言首頁取得 
+        /// </summary>
+        /// <returns></returns>
+        //[AllowAnonymous]
+        //public ActionResult ReplyIndex(int id)
+        //{
+        //    List<MessageReply> model = messageWeb.GetReplys().ToList();
+        //    string UserAccount = "";
+        //    string UserName = "";
+        //    int Id = 0;
+        //    byte UserClass = 0;
+
+        //    if (Session["UserAccount"] != null)
+        //    {
+        //        UserAccount = Session["UserAccount"].ToString();
+        //        ViewBag.UserAccount = UserAccount;
+        //        UserName = Session["UserName"].ToString();
+        //        ViewBag.UserName = UserName;
+        //        int.TryParse(Session["Id"].ToString(), out Id);
+        //        ViewBag.Id = Id;
+        //        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+        //        ViewBag.UserClass = UserClass;
+        //    }
+        //    return View(model);
+        //}
+        #endregion
+
+
 
     }
 }

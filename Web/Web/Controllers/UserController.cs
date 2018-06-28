@@ -48,7 +48,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Library.User user, string UserAccount, int UserClass)
+        public ActionResult Create(Library.User user, string UserAccount)
         {
             UserWeb userWeb = new UserWeb();
 
@@ -65,14 +65,19 @@ namespace Web.Controllers
                 return View();
             }
                 else {
-                        
-                if (UserClass == 0)
+                byte UserClass = 0;
+
+                if (Session["Id"] != null)
                 {
-                    return RedirectToAction("Index");
+                    byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+                }
+                if (UserClass == 2)
+                {
+                    return RedirectToAction("Index", "User");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Message");
+                    return RedirectToAction("Login", "User");
                 }
             }
            
@@ -168,7 +173,7 @@ namespace Web.Controllers
         public ActionResult Delete(int id)
         {
             userWeb.DeleteUser(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "User");
         }
         #endregion
 
@@ -182,6 +187,16 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            int Id = 0;
+
+            if (Session["Id"] != null)
+            {
+                int.TryParse(Session["Id"].ToString(), out Id);
+            }
+            if(Id != 0)
+            {
+                return RedirectToAction("Index", "Message");
+            }
             return View();
         }
 
