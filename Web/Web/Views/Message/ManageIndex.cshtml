@@ -45,7 +45,7 @@
                             @Html.DisplayFor(modelItem => item.Messages.CreatDate)
                         </td>
                         <td>
-                            <input type="button" class="btn btn-primary btn-sm" value="回覆" onclick="location.href='@Url.Action("Create", "Reply", new{ id = item.Messages.Id })'" />
+                            <input type="button" class="btn btn-primary btn-sm" value="回覆" onclick="location.href='@Url.Action("ReplyIndex", "Message", new{ messagesId = item.Messages.Id })'" />
                             <input type="submit" class="btn btn-primary btn-sm" value="刪除" onclick="return confirm('確定要刪除嗎? 留言編號 = @item.Messages.Id , 留言內容 = @item.Messages.Context');" />
                         </td>
                     </tr>

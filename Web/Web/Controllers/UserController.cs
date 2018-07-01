@@ -30,7 +30,19 @@ namespace Web.Controllers
             List<Library.User> users = userWeb.GetUsers()
                     .Where(x => !x.Delete)
                     .ToList();
-            return View(users);
+            byte UserClass = 0;
+            if (Session["Id"] != null)
+            {
+                byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+            }
+            if (UserClass == 2)
+            {
+                return View(users);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Message");
+            }
         }
         #endregion
 
@@ -112,7 +124,20 @@ namespace Web.Controllers
             {
                 ViewBag.UserClass = "一般";
             }
-            return View(user);
+
+            byte UserClass = 0;
+            if (Session["Id"] != null)
+            {
+                byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+            }
+            if (UserClass == 2)
+            {
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Message");
+            }
         }
         #endregion
 
@@ -150,15 +175,24 @@ namespace Web.Controllers
             }
 
             userWeb.SaveUser(user);
-            if (user.UserClass == 0)
+
+            byte UserClass = 0;
+            if (Session["Id"] != null)
             {
-                return RedirectToAction("Index");
+                byte.TryParse(Session["UserClass"].ToString(), out UserClass);
             }
-            else
-            {
+            if (UserClass == 2)
+                {
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                if (Session["Id"] != null)
+                {
+                    Session["UserName"] = user.UserName ;
+                }
                 return RedirectToAction("Index", "Message");
-            }
-                
+                }
         }
         #endregion
 

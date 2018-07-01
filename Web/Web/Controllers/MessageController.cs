@@ -32,6 +32,7 @@ namespace Web.Controllers
 
             if (Session["UserAccount"] != null)
             {
+
                 UserAccount = Session["UserAccount"].ToString();
                 ViewBag.UserAccount = UserAccount;
                 UserName = Session["UserName"].ToString();
@@ -55,7 +56,19 @@ namespace Web.Controllers
         public ActionResult ManageIndex()
         {
             //List<MessageReply> data = new List<MessageReply>();
-            return View(messageWeb.GetMessageReplys());
+            byte UserClass = 0;
+            if (Session["Id"] != null)
+            {
+                byte.TryParse(Session["UserClass"].ToString(), out UserClass);
+            }
+            if (UserClass == 2)
+            {
+                return View(messageWeb.GetMessageReplys());
+            }
+            else
+            {
+                return RedirectToAction("Index", "Message");
+            }
         }
         #endregion
 
@@ -138,33 +151,21 @@ namespace Web.Controllers
 
         #endregion
 
-        #region 留言首頁取得 
+        #region 回覆取得 
         /// <summary>
-        /// 留言首頁取得 
+        /// 回覆取得 
         /// </summary>
         /// <returns></returns>
-        //[AllowAnonymous]
-        //public ActionResult ReplyIndex(int id)
-        //{
-        //    List<MessageReply> model = messageWeb.GetReplys().ToList();
-        //    string UserAccount = "";
-        //    string UserName = "";
-        //    int Id = 0;
-        //    byte UserClass = 0;
+        public ActionResult ReplyIndex(int messagesId)
+        {
+            //List<MessageReply> model = messageWeb.GetMessageReplys().ToList();
+            //Library.MessageReply model = messageWeb.GetMessageReplys().ToList()
+            //    .Find(x => x.Messages.Id == messagesId);
+            Library.MessageReply model = messageWeb.GetMessageReplys().ToList()
+                    .Find(x => x.Messages.Id == messagesId);
 
-        //    if (Session["UserAccount"] != null)
-        //    {
-        //        UserAccount = Session["UserAccount"].ToString();
-        //        ViewBag.UserAccount = UserAccount;
-        //        UserName = Session["UserName"].ToString();
-        //        ViewBag.UserName = UserName;
-        //        int.TryParse(Session["Id"].ToString(), out Id);
-        //        ViewBag.Id = Id;
-        //        byte.TryParse(Session["UserClass"].ToString(), out UserClass);
-        //        ViewBag.UserClass = UserClass;
-        //    }
-        //    return View(model);
-        //}
+            return View(model);
+        }
         #endregion
 
 

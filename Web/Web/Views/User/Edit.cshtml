@@ -1,6 +1,6 @@
 ﻿@model Library.User
 @{
-
+    ViewBag.Title = "基本資料編輯";
 }
 <div class="row">
     <h2>基本資料編輯</h2>
@@ -33,6 +33,7 @@
                     </div>
                 </div>
             }
+             @Html.HiddenFor(model => model.UserClass)
             <div class="form-group">
                 @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
